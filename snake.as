@@ -25,9 +25,6 @@
 	 * @author ...
 	 * @version ...
 	 */
-	
-	
-	
 	public class snake extends MovieClip
 	{
 		// Différents tableaux de jeux. 1 acceuil, 2 jeu, 3 Game Over
@@ -38,15 +35,10 @@
 		//Variables utilisés pour le fonctionnement du jeu
 		public var tableau:Array= new Array();
 		public var tete:carre=new carre();
-		private var _cerise:MovieClip;
 		private var _music:Sound;
 		private var _channel:SoundChannel;
 		public var dir:String ="down";
-		
-		
-		
-		
-		
+		private var _pomme:MovieClip;
 		
 		public function snake() :void
 		{
@@ -109,11 +101,10 @@
 			
 			//ajout du jeu a l'affichage
 			addChild(_jeu);
-			addchild (_startGame);
-			
+			startGame();
 		}
-			
-			public function startGame():void 
+		
+		public function startGame():void 
 		{
 			//jeux snake a mettre ici !
 			tete.x=0;
@@ -134,6 +125,15 @@
 			// Il faut mettre ca dans un truc jeu, voir code du tp2
 			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownListener);
 			_jeu.addEventListener(Event.ENTER_FRAME,deplaceboule);
+			
+			// Placement pomme départ
+			_pomme = new pomme();
+			addChild(_pomme);
+			_pomme.x = Math.random()*500;
+			_pomme.y = Math.random()*500;
+		}
+		
+		
 		//c'est ca qui demarre la mecanique du jeu
 		private function keyDownListener(e:KeyboardEvent):void{
 
@@ -163,7 +163,7 @@
 						dir = "right"; 
 					}
 		}
-	}
+		
 		
 		
 		private function deplaceboule(e:Event){
