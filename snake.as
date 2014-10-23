@@ -169,6 +169,12 @@
 		private function gameloop(e:Event){
 			deplaceboule();
 			detectcolision();
+			// Fin du jeu, sort de l'écran
+			if(tete.x < 0 || tete.x > 500 || tete.y <0 || tete.y > 500) 
+				{
+					// Appeler Fin partie
+					gameOver();
+				}
 			}
 			
 		
@@ -214,6 +220,16 @@
 						return Math.random()*(max-min)+min;
 					}
 		
+		public function gameOver():void  
+		{
+			// Enleve la page jeu et ajouter la page pointage
+			if (contains(_jeu))
+			{
+				removeChild(_jeu);
+			}
+			_pointage = new PointageMC();
+			addChild(_pointage);
+		}
 		// Faire passer le serpent de part et d'autre de la scene
 		// Gérer l'apparition des pommes
 		// Fonction pour ajouter une boule pour la queue du serpant quand une pomme est manger
