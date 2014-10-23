@@ -39,6 +39,7 @@
 		private var _channel:SoundChannel;
 		public var dir:String ="down";
 		private var _pomme:MovieClip;
+		private var _longeurSerpent:int;
 		
 		public function snake() :void
 		{
@@ -129,12 +130,8 @@
 			// Placement pomme départ
 			_pomme = new pomme();
 			addChild(_pomme);
-			_pomme.x = Math.random()*500;
-			_pomme.y = Math.random()*500;
-			
-			
-			// Collision cerise et tete du serpent
-			
+			_pomme.x = random(20, 480);
+			_pomme.y = random(20, 480);
 		}
 		
 		
@@ -174,13 +171,16 @@
 			detectcolision();
 			}
 			
+		
+		// Collision pomme et tete du serpent
 		private function detectcolision(){
 				if(tete.hitTestObject(_pomme)) {
 				
 				// replacement de la pomme remplacer par rand_range
-				_pomme.x = Math.random()*500;
-				_pomme.y = Math.random()*500;
+				_pomme.x = random(10, 490);
+				_pomme.y = random(10, 490);
 				
+				_longeurSerpent ++;
 				// La longeur du corps augmente
 				//longeur du corps ++ <- creer une variable pour la longeur du corps.
 				
@@ -208,6 +208,11 @@
 				}
 			}
 		}
+		
+		
+		function random(min:Number, max:Number):Number {
+						return Math.random()*(max-min)+min;
+					}
 		
 		// Faire passer le serpent de part et d'autre de la scene
 		// Gérer l'apparition des pommes
