@@ -124,13 +124,17 @@
 			// ne pas mettre dans stage car sa va planter l'appli du prof.
 			// Il faut mettre ca dans un truc jeu, voir code du tp2
 			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownListener);
-			_jeu.addEventListener(Event.ENTER_FRAME,deplaceboule);
+			_jeu.addEventListener(Event.ENTER_FRAME,gameloop);
 			
 			// Placement pomme départ
 			_pomme = new pomme();
 			addChild(_pomme);
 			_pomme.x = Math.random()*500;
 			_pomme.y = Math.random()*500;
+			
+			
+			// Collision cerise et tete du serpent
+			
 		}
 		
 		
@@ -165,8 +169,25 @@
 		}
 		
 		
-		
-		private function deplaceboule(e:Event){
+		private function gameloop(e:Event){
+			deplaceboule();
+			detectcolision();
+			}
+			
+		private function detectcolision(){
+				if(tete.hitTestObject(_pomme)) {
+				
+				// replacement de la pomme remplacer par rand_range
+				_pomme.x = Math.random()*500;
+				_pomme.y = Math.random()*500;
+				
+				// La longeur du corps augmente
+				//longeur du corps ++ <- creer une variable pour la longeur du corps.
+				
+				}
+			}
+			
+		private function deplaceboule(){
 				for(var i:int=1;i<tableau.length;i++){
 					tableau[i].ancienx=tableau[i].x;
 					tableau[i].ancieny=tableau[i].y;
