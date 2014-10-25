@@ -72,6 +72,7 @@
 			
 			//creation de l'instance
 			_accueil = new AccueilMC();
+			_pointage = new PointageMC();
 			
 			_music = new music();
 			//association d'un canal pour contrôler le son, si nécessaire
@@ -79,14 +80,18 @@
 			_channel = _music.play(0, 999);
 			
 			//ecouteur de click
+			//_accueil.btnJouer.buttonMode=true;
 			_accueil.btnJouer.addEventListener(MouseEvent.CLICK, onStartGame);
+			
+			_pointage.btnReJouer.buttonMode=true;
+			_pointage.btnReJouer.addEventListener(MouseEvent.CLICK, onEndGame);
 			//et on dit que quand on clik, le jeu va commencer (ctrl+shit+1) sur onStartGame
 			
 			//ajouter a l'affichage
 			addChild(_accueil);
 		}
 		
-		// Fonction qui gere le fonctionnement du jeu.
+		// Fonction qui La creation de la page d'accuil.
 		private function onStartGame(e:MouseEvent):void 
 		{
 			//enlever l'accueil de l'affichage si elle est présente
@@ -105,23 +110,29 @@
 			startGame();
 		}
 		
+		private function onEndGame(e:MouseEvent):void 
+		{
+			//enlever l'accueil de l'affichage si elle est présente
+			//si la page contient accueil, alors on la retire
+			if (contains(_pointage)){
+				removeChild(_pointage);
+				_pointage.btnReJouer.removeEventListener(MouseEvent.CLICK, onEndGame);
+			}
+			
+			//creation de la page jeu si elle n'existe pas deja
+			if (_jeu == null){
+				_jeu = new JeuMC();
+			}
+			
+			//ajout du jeu a l'affichage
+			addChild(_jeu);
+			startGame();
+		}
+		
 		public function startGame():void 
 		{
-			//jeux snake a mettre ici !
-			tete.x=0;
-			tete.y=0;
-			tableau.push(tete);
-				for(var i:int=1;i<5;i++){
-					var uneboule:boule= new boule();
-					uneboule.x=25*i;
-					uneboule.y=0;
-					
-					tableau.push(uneboule);
-				}
-	
-			for(i=0;i< tableau.length;i++){
-				_jeu.addChild(tableau[i]);
-			}
+			
+			addboule();
 			// ne pas mettre dans stage car sa va planter l'appli du prof.
 			// Il faut mettre ca dans un truc jeu, voir code du tp2
 			stage.addEventListener(KeyboardEvent.KEY_DOWN,keyDownListener);
@@ -169,12 +180,22 @@
 		private function gameloop(e:Event){
 			deplaceboule();
 			detectcolision();
-			// Fin du jeu, sort de l'écran
-			if(tete.x < 0 || tete.x > 500 || tete.y <0 || tete.y > 500) 
+			
+			// Fin du jeu, si le serpent sort de l'écran.
+			// Je rencontre un problème. Il semblerait
+			// que la colision soit calculée par rapport au coin gauche de
+			// la tête du serpent. Quand la tête sort à droite ou en bas de la scène,
+			// il faut attendre qu'elle traverse complètement la scène avant
+			//  de lancer un "gameover". Du coup, j'ai réduit la zonne de colision
+			// pour que celle-ci entre en colision directement dès que la 
+			// tête du serpent touche un bord de le scène.
+			// (500 taille de la scene - 25 taille de la tete du serpant)
+			if(tete.x < 0 || tete.x > 475 || tete.y <0 || tete.y > 475) 
 				{
 					// Appeler Fin partie
 					gameOver();
 				}
+				
 			}
 			
 		
@@ -185,15 +206,42 @@
 				// replacement de la pomme remplacer par rand_range
 				_pomme.x = random(10, 490);
 				_pomme.y = random(10, 490);
-				
-				_longeurSerpent ++;
+				_longeurSerpent++;
+				nouvelleboule();
 				// La longeur du corps augmente
 				//longeur du corps ++ <- creer une variable pour la longeur du corps.
 				
 				}
 			}
 			
-		private function deplaceboule(){
+		function addboule():void{
+			// Ajouter la tete
+			tete.x=0;
+			tete.y=0;
+			tableau.push(tete);
+			_jeu.addChild(tableau[0]);
+			
+			//Ajouter 5 boules de départ
+			for(var i:int=1;i<5;i++){
+					var uneboule:boule= new boule();
+					uneboule.x=25*i;
+					uneboule.y=0;
+					tableau.push(uneboule);
+					_jeu.addChild(tableau[i]);
+				}
+			
+			}
+		
+		function nouvelleboule():void{
+				var uneboule:boule = new boule();
+				uneboule.x=tableau[tableau.length-1].ancienx;
+				uneboule.y=tableau[tableau.length-1].ancieny;
+				tableau.push(uneboule);
+				_jeu.addChild(uneboule);
+				
+			}
+			
+		function deplaceboule(){
 				for(var i:int=1;i<tableau.length;i++){
 					tableau[i].ancienx=tableau[i].x;
 					tableau[i].ancieny=tableau[i].y;
@@ -222,14 +270,25 @@
 		
 		public function gameOver():void  
 		{
+			_jeu.removeEventListener(Event.ENTER_FRAME,gameloop);
+			for(var i:int=1;i<tableau.length;i++){
+					_jeu.removeChild(tableau[i]);
+				}
+			tableau.length = 0;
+			tete.destroy();
+			//tableau.length =0;
+			trace("mon tableau est composé de: " + tableau);
+
 			// Enleve la page jeu et ajouter la page pointage
 			if (contains(_jeu))
 			{
 				removeChild(_jeu);
 			}
-			_pointage = new PointageMC();
 			addChild(_pointage);
+			_jeu = null;
+			
 		}
+		
 		// Faire passer le serpent de part et d'autre de la scene
 		// Gérer l'apparition des pommes
 		// Fonction pour ajouter une boule pour la queue du serpant quand une pomme est manger
@@ -254,5 +313,7 @@
 			//Détruire la musique ?
 			
 		}
-	}
+	
+}
+
 }
