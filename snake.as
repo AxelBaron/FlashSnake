@@ -40,6 +40,7 @@
 		public var dir:String ="down";
 		private var _pomme:MovieClip;
 		private var _longeurSerpent:int;
+		var _uneboule:boule;
 		
 		public function snake() :void
 		{
@@ -80,6 +81,7 @@
 			_channel = _music.play(0, 999);
 			
 			//ecouteur de click
+			// Je sais pas pouquoi quand je met sa les controles ne marchent plus.
 			//_accueil.btnJouer.buttonMode=true;
 			_accueil.btnJouer.addEventListener(MouseEvent.CLICK, onStartGame);
 			
@@ -121,17 +123,19 @@
 			
 			//creation de la page jeu si elle n'existe pas deja
 			if (_jeu == null){
+				trace('Le tableau'+  tableau);
 				_jeu = new JeuMC();
+				addChild(_jeu);
+				startGame();
 			}
 			
 			//ajout du jeu a l'affichage
-			addChild(_jeu);
-			startGame();
+			
 		}
 		
 		public function startGame():void 
 		{
-			
+			// Fontion pour mettre les boules de bases avec le serpent.
 			addboule();
 			// ne pas mettre dans stage car sa va planter l'appli du prof.
 			// Il faut mettre ca dans un truc jeu, voir code du tp2
@@ -210,9 +214,14 @@
 				nouvelleboule();
 				// La longeur du corps augmente
 				//longeur du corps ++ <- creer une variable pour la longeur du corps.
-				
 				}
-			}
+				
+				for (var a:int = 3; a< tableau.length; a++){ 
+					if(tete.hitTestObject(tableau[a])) {
+						gameOver();
+					}
+				}
+		}
 			
 		function addboule():void{
 			// Ajouter la tete
@@ -222,22 +231,23 @@
 			_jeu.addChild(tableau[0]);
 			
 			//Ajouter 5 boules de départ
-			for(var i:int=1;i<5;i++){
-					var uneboule:boule= new boule();
-					uneboule.x=25*i;
-					uneboule.y=0;
-					tableau.push(uneboule);
+			for(var i:int=1;i<4;i++){
+					_uneboule= new boule();
+					_uneboule.x=25*i;
+					_uneboule.y=0;
+					tableau.push(_uneboule);
 					_jeu.addChild(tableau[i]);
 				}
 			
 			}
 		
 		function nouvelleboule():void{
-				var uneboule:boule = new boule();
-				uneboule.x=tableau[tableau.length-1].ancienx;
-				uneboule.y=tableau[tableau.length-1].ancieny;
-				tableau.push(uneboule);
-				_jeu.addChild(uneboule);
+			
+			_uneboule = new boule();
+			_uneboule.x=tableau[tableau.length-1].ancienx;
+			_uneboule.y=tableau[tableau.length-1].ancieny;
+			tableau.push(_uneboule);
+			_jeu.addChild(_uneboule);
 				
 			}
 			

@@ -9,8 +9,6 @@
 		public var ancienx;
 		public var ancieny;
 		
-
-		
 		/*
 			Methodes
 		*/
