@@ -33,11 +33,11 @@
 		private var _pointage:MovieClip;
 		
 		//Variables utilisés pour le fonctionnement du jeu
-		public var tableau:Array= new Array();
-		public var tete:carre=new carre();
+		public var tableau:Array;
+		public var tete:carre;
 		private var _music:Sound;
 		private var _channel:SoundChannel;
-		public var dir:String ="down";
+		public var dir:String;
 		private var _pomme:MovieClip;
 		private var _longeurSerpent:int;
 		var _uneboule:boule;
@@ -73,7 +73,6 @@
 			
 			//creation de l'instance
 			_accueil = new AccueilMC();
-			_pointage = new PointageMC();
 			
 			_music = new music();
 			//association d'un canal pour contrôler le son, si nécessaire
@@ -85,8 +84,7 @@
 			//_accueil.btnJouer.buttonMode=true;
 			_accueil.btnJouer.addEventListener(MouseEvent.CLICK, onStartGame);
 			
-			_pointage.btnReJouer.buttonMode=true;
-			_pointage.btnReJouer.addEventListener(MouseEvent.CLICK, onEndGame);
+			
 			//et on dit que quand on clik, le jeu va commencer (ctrl+shit+1) sur onStartGame
 			
 			//ajouter a l'affichage
@@ -134,7 +132,14 @@
 		}
 		
 		public function startGame():void 
-		{
+		{	_pointage = new PointageMC();
+			_pointage.btnReJouer.buttonMode=true;
+			_pointage.btnReJouer.addEventListener(MouseEvent.CLICK, onEndGame);
+			tableau= new Array();
+			tete=new carre();
+			dir="down";
+
+
 			// Fontion pour mettre les boules de bases avec le serpent.
 			addboule();
 			// ne pas mettre dans stage car sa va planter l'appli du prof.
@@ -286,17 +291,13 @@
 				}
 			tableau.length = 0;
 			tete.destroy();
-			//tableau.length =0;
+			_jeu.removeChild(tete);
 			trace("mon tableau est composé de: " + tableau);
 
 			// Enleve la page jeu et ajouter la page pointage
-			if (contains(_jeu))
-			{
-				removeChild(_jeu);
-			}
-			addChild(_pointage);
 			_jeu = null;
-			
+			addChild(_pointage);
+			startGame();
 		}
 		
 		// Faire passer le serpent de part et d'autre de la scene
