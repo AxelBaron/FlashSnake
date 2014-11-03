@@ -25,7 +25,7 @@
 	 * @author ...
 	 * @version ...
 	 */
-	public class snake extends MovieClip
+	public class Snake extends MovieClip
 	{
 		// Différents tableaux de jeux. 1 acceuil, 2 jeu, 3 Game Over
 		private var _accueil:MovieClip;
@@ -41,8 +41,9 @@
 		private var _pomme:MovieClip;
 		private var _longeurSerpent:int;
 		var _uneboule:boule;
+		public static var check:Boolean=false;
 		
-		public function snake() :void
+		public function Snake() :void
 		{
 			/**
 			 * IMPORTANT !!!!!!!
@@ -91,7 +92,7 @@
 			addChild(_accueil);
 		}
 		
-		// Fonction qui La creation de la page d'accuil.
+		// Fonction qui La creation de la page d'accueil.
 		private function onStartGame(e:MouseEvent):void 
 		{
 			//enlever l'accueil de l'affichage si elle est présente
@@ -121,7 +122,6 @@
 			
 			//creation de la page jeu si elle n'existe pas deja
 			if (_jeu == null){
-				trace('Le tableau'+  tableau);
 				_jeu = new JeuMC();
 				addChild(_jeu);
 				startGame();
@@ -132,7 +132,10 @@
 		}
 		
 		public function startGame():void 
-		{	_pointage = new PointageMC();
+		{	
+			stage.focus=stage;
+			check=false;
+			_pointage = new PointageMC();
 			_pointage.btnReJouer.buttonMode=true;
 			_pointage.btnReJouer.addEventListener(MouseEvent.CLICK, onEndGame);
 			tableau= new Array();
@@ -152,6 +155,8 @@
 			addChild(_pomme);
 			_pomme.x = random(20, 480);
 			_pomme.y = random(20, 480);
+			
+			
 		}
 		
 		
@@ -159,30 +164,37 @@
 		private function keyDownListener(e:KeyboardEvent):void{
 
 			// Si on appuie sur la touche bas, la tete du serpant décend de 25px.
+				if(check==false){
 					
+				
 					if (e.keyCode == Keyboard.DOWN && dir != "up") {
 						tete.yi=25;
 						tete.xi=0;
 						dir = "down";
+						check = true;
 					}
 					
 					if (e.keyCode == Keyboard.UP && dir != "down") {
 						tete.yi=-25;
 						tete.xi=0;
 						dir = "up";
+						check = true;
 					}
 					
 					if (e.keyCode == Keyboard.LEFT && dir != "right") {
 						tete.yi=0;
 						tete.xi=-25;
 						dir = "left";
+						check = true;
 					}
 					
 					if (e.keyCode == Keyboard.RIGHT && dir != "left") {
 						tete.yi=0;
 						tete.xi=25;
-						dir = "right"; 
+						dir = "right";
+						check = true;
 					}
+				}
 		}
 		
 		
@@ -266,6 +278,7 @@
 				
 				//Accélerer ou diminuer la vitesse du jeu !
 				sleep(100);
+				//check =false;
 		}
 		
 		// Fonction Sleep trouvé sur internet. Elle met le jeu en pause
@@ -292,12 +305,15 @@
 			tableau.length = 0;
 			tete.destroy();
 			_jeu.removeChild(tete);
-			trace("mon tableau est composé de: " + tableau);
 
 			// Enleve la page jeu et ajouter la page pointage
 			_jeu = null;
+			
+			//_pointage.txtScore.text= String(_longeurSerpent);
+			//trace(_longeurSerpent);
+			//_longeurSerpent=0;
+				
 			addChild(_pointage);
-			startGame();
 		}
 		
 		// Faire passer le serpent de part et d'autre de la scene
@@ -322,9 +338,8 @@
 			//detruire les timers si ils existent
 			
 			//Détruire la musique ?
-			
 		}
 	
-}
+	}
 
 }

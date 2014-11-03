@@ -16,6 +16,7 @@
 			this.ancieny=this.y;
 			this.x= this.x+xi;
 			this.y= this.y+yi;
+			Snake.check=false;
 		}
 			
 			public function destroy():void{
