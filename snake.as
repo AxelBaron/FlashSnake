@@ -78,7 +78,7 @@
 			_music = new music();
 			//association d'un canal pour contrôler le son, si nécessaire
 			//jouer la musiaue en loop (999 fois)
-			_channel = _music.play(0, 999);
+			//_channel = _music.play(0, 999);
 			
 			//ecouteur de click
 			// Je sais pas pouquoi quand je met sa les controles ne marchent plus.
@@ -309,8 +309,8 @@
 			// Enleve la page jeu et ajouter la page pointage
 			_jeu = null;
 			
-			//_pointage.txtScore.text= String(_longeurSerpent);
-			//trace(_longeurSerpent);
+			_pointage.txtpointage.text=_longeurSerpent.toString();
+			trace(_longeurSerpent);
 			//_longeurSerpent=0;
 				
 			addChild(_pointage);
@@ -336,8 +336,15 @@
 		public function unloadApp():void {
 			///ici vous devez détruire tout ce qui ne l'est pas déja (écouteur, movieClip, sons, timer, références, etc..)
 			//detruire les timers si ils existent
+				_accueil.btnJouer.removeEventListener(MouseEvent.CLICK, onStartGame);
+				_pointage.btnReJouer.removeEventListener(MouseEvent.CLICK, onEndGame);
+				stage.removeEventListener(KeyboardEvent.KEY_DOWN,keyDownListener);
+				removeChild(_accueil);
+				removeChild(_jeu); 
+				removeChild(_pointage); 
+				removeChild(tete);
+				_channel.stop();
 			
-			//Détruire la musique ?
 		}
 	
 	}
