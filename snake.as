@@ -42,7 +42,7 @@
 		private var _longeurSerpent:int;
 		var _uneboule:boule;
 		public static var check:Boolean=false;
-		
+
 		public function Snake() :void
 		{
 			/**
@@ -299,21 +299,25 @@
 		public function gameOver():void  
 		{
 			_jeu.removeEventListener(Event.ENTER_FRAME,gameloop);
+			
 			for(var i:int=1;i<tableau.length;i++){
 					_jeu.removeChild(tableau[i]);
 				}
+				
 			tableau.length = 0;
 			tete.destroy();
 			_jeu.removeChild(tete);
 
 			// Enleve la page jeu et ajouter la page pointage
 			_jeu = null;
+				
 			
-			_pointage.txtpointage.text=_longeurSerpent.toString();
 			trace(_longeurSerpent);
 			//_longeurSerpent=0;
 				
+			_pointage.txtPointage.text=_longeurSerpent.toString();	
 			addChild(_pointage);
+				
 		}
 		
 		// Faire passer le serpent de part et d'autre de la scene
