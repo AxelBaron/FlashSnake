@@ -78,7 +78,7 @@
 			_music = new music();
 			//association d'un canal pour contrôler le son, si nécessaire
 			//jouer la musiaue en loop (999 fois)
-			//_channel = _music.play(0, 999);
+			_channel = _music.play(0, 999);
 			
 			//ecouteur de click
 			// Je sais pas pouquoi quand je met sa les controles ne marchent plus.
@@ -116,6 +116,7 @@
 			//enlever l'accueil de l'affichage si elle est présente
 			//si la page contient accueil, alors on la retire
 			if (contains(_pointage)){
+				dispatchEvent(new PlateformEvent(PlateformEvent.RESTARTED,true));
 				removeChild(_pointage);
 				_pointage.btnReJouer.removeEventListener(MouseEvent.CLICK, onEndGame);
 			}
@@ -126,8 +127,6 @@
 				addChild(_jeu);
 				startGame();
 			}
-			
-			//ajout du jeu a l'affichage
 			
 		}
 		
@@ -313,9 +312,11 @@
 				
 			
 			trace(_longeurSerpent);
-			//_longeurSerpent=0;
+			
 				
-			_pointage.txtPointage.text=_longeurSerpent.toString();	
+			_pointage.txtPointage.text=_longeurSerpent.toString();
+			_longeurSerpent=0;
+			dispatchEvent(new PlateformEvent(PlateformEvent.SET_HIGHSCORE,true,false,_longeurSerpent));
 			addChild(_pointage);
 				
 		}
