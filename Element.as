@@ -3,15 +3,11 @@
 	
 	public class Element extends MovieClip{
 		
-		/*
-			atributs
-		*/
+		// atributs qui seront communs aux classes "carre" et "boule".
 		public var ancienx;
 		public var ancieny;
 		
-		/*
-			Methodes
-		*/
+
 		public function Element() {
 			 
 
